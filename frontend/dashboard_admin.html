@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | RecycleX</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .marketplace-card {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-leaf"></i> Business
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" onclick="toggleSidebar()"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="dashboard_admin.html" class="active" onclick="toggleSidebar()"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#services" onclick="toggleSidebar()"><i class="fa-solid fa-layer-group"></i> Our Services</a>
+                <a href="#scrap-insights" onclick="toggleSidebar()"><i class="fa-solid fa-map-location-dot"></i> Scrap Insights</a>
+                <a href="javascript:void(0)" onclick="showAdminHistory(); setTimeout(()=>document.getElementById('historyModal').scrollIntoView({behavior:'smooth', block:'start'}), 100); toggleSidebar()"><i class="fa-solid fa-clock-rotate-left"></i> Orders History</a>
+                <a href="profile.html" onclick="toggleSidebar()"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="#" onclick="logout()" style="color: #ef4444; margin-top: auto;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="brand-name"><i class="fa-solid fa-leaf"></i> RecycleX</div>
+                </div>
+                <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
+                    <button onclick="toggleTheme()" style="background: transparent; border: none; cursor: pointer; color: var(--primary-green); font-size: 1.25rem; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-moon theme-icon"></i></button>
+                    <select id="languageSwitcher" onchange="changeLanguage(this.value)" style="padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); font-size: 0.85rem; width: auto; background: var(--surface-solid); color: var(--text-main); cursor: pointer;">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                    <span id="adminGreeting" style="font-weight: 600; color: var(--text-main);"></span>
+                </div>
+            </header>
+
+            <div class="container" style="margin-top: 2rem;">
+        <div class="grid-2">
+            
+            <div class="glass-panel animate-in">
+                <h2 style="color: var(--primary-green); margin-bottom: 1.5rem;">Marketplace & Optimization</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Book pickups. Our scikit-learn Route Optimizer will map them dynamically.</p>
+                
+                <div id="alertBox" class="alert"></div>
+
+                <div id="marketplaceList">
+                    <!-- Scrap items will load here -->
+                    <p style="color: var(--text-muted);">Loading available scrap...</p>
+                </div>
+            </div>
+
+            <div class="glass-panel animate-in" style="animation-delay: 0.2s;">
+                <h2 style="color: var(--primary-green); margin-bottom: 1.5rem;">Smart Route Output</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Below are your optimized pickups dynamically clustered to minimize distance/time.</p>
+                
+                <div id="routeList">
+                    <!-- Routes load here -->
+                    <p style="color: var(--text-muted);">Loading schedule...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Our Services Section -->
+    <section id="services" class="animate-in" style="margin-top: 4rem; margin-bottom: 4rem; text-align: center;">
+        <h2 style="color: var(--text-main); font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 800;">Our Services</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2.5rem;">Attaining <span style="color: var(--primary-green); font-weight: 600;">sustainable solutions</span> with ease.</p>
+
+        
+
+
+        <!-- Services Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; text-align: left;">
+            
+            <!-- Card 1 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(239,68,68,0.2);">
+                    <i class="fa-solid fa-mobile-screen" style="color: #ef4444; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Scrap Collection</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Digitised solution for the door-to-door free pickup of 40+ recyclables.</p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(59, 130, 246, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(59,130,246,0.2);">
+                    <i class="fa-solid fa-building-circle-check" style="color: #3b82f6; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">EPR Service</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">RecycleX as a registered PRO, official collection & recycling partner helps in the compliance process of EPR.</p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(202, 138, 4, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(202,138,4,0.2);">
+                    <i class="fa-solid fa-box-open" style="color: #ca8a04; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Zero waste services</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Serving the Institutes/Offices/Events in achieving their zero waste goals.</p>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(16,185,129,0.2);">
+                    <i class="fa-solid fa-users-rectangle" style="color: #10b981; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Zero Waste Society</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Serving the Residential Societies in achieving their zero waste goals.</p>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(168, 85, 247, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(168,85,247,0.2);">
+                    <i class="fa-solid fa-file-shield" style="color: #a855f7; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Shredding service</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Aiding Businesses in the safe & secure disposal of their confidential documents.</p>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(6, 182, 212, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(6,182,212,0.2);">
+                    <i class="fa-solid fa-screwdriver-wrench" style="color: #06b6d4; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Dismantling service</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Providing holistic approach to implement circular solutions to the scrap disposal.</p>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(99,102,241,0.2);">
+                    <i class="fa-solid fa-truck-pickup" style="color: #6366f1; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Vehicle Scrapping Service</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Assisting people in getting rid of their old vehicles sustainably.</p>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(34, 197, 94, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(34,197,94,0.2);">
+                    <i class="fa-solid fa-infinity" style="color: #22c55e; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">Circular Economy Services</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Planning, designing, and successfully executing brand's CSR campaigns as per their objectives.</p>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; gap: 1.25rem; align-items: center; cursor: pointer;">
+                <div style="background: rgba(219, 39, 119, 0.1); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(219,39,119,0.2);">
+                    <i class="fa-solid fa-hand-holding-hand" style="color: #db2777; font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 0.3rem;">CSR Activity</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">Planning, designing, and successfully executing brand's CSR campaigns as per their objectives.</p>
+                </div>
+            </div>
+
+        </div>
+
+        
+    </section>
+
+    <!-- Scrap Insights Section -->
+    <section class="glass-panel animate-in" style="margin: 2rem; animation-delay: 0.4s; overflow: hidden; position: relative;" id="scrap-insights">
+        <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%); border-radius: 50%; opacity: 0.5; pointer-events: none;"></div>
+        <h2 style="color: var(--primary-green); margin-bottom: 0.5rem; font-size: 2rem;"><i class="fa-solid fa-map-location-dot"></i> Scrap Insights: India & Maharashtra</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem;">Facts, figures, and the complete journey from waste to wealth.</p>
+        <div class="grid-2" style="gap: 1.5rem; align-items: start; margin-bottom: 2.5rem;">
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.03)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 1.75rem;">
+                <h3 style="color: #059669; margin-bottom: 1.25rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.6rem; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 0.75rem;"><i class="fa-solid fa-circle-check"></i> Advantages of Scrap Recycling</h3>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.85rem;">
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-leaf" style="color: #10b981; margin-top: 0.2rem; flex-shrink: 0;"></i> Conserves natural resources like timber, water, and minerals by replacing raw material extraction.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-bolt" style="color: #10b981; margin-top: 0.2rem; flex-shrink: 0;"></i> Saves up to <strong>95% energy</strong> for metals like aluminium compared to mining new ore.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-cloud" style="color: #10b981; margin-top: 0.2rem; flex-shrink: 0;"></i> Significantly reduces greenhouse gas emissions and carbon footprint.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-indian-rupee-sign" style="color: #10b981; margin-top: 0.2rem; flex-shrink: 0;"></i> Creates local jobs and circular economy — especially in Maharashtra's 3.5 MT/year industry.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-recycle" style="color: #10b981; margin-top: 0.2rem; flex-shrink: 0;"></i> Diverts waste from landfills, preventing groundwater and soil pollution.</li>
+                </ul>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.07), rgba(239, 68, 68, 0.02)); border: 1.5px solid rgba(239, 68, 68, 0.25); border-radius: 16px; padding: 1.75rem;">
+                <h3 style="color: #ef4444; margin-bottom: 1.25rem; font-size: 1.2rem; display: flex; align-items: center; gap: 0.6rem; border-bottom: 1px solid rgba(239,68,68,0.2); padding-bottom: 0.75rem;"><i class="fa-solid fa-circle-exclamation"></i> Disadvantages to Address</h3>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.85rem;">
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444; margin-top: 0.2rem; flex-shrink: 0;"></i> Improper e-waste disposal causes <strong>soil and water contamination</strong> with toxic heavy metals.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-people-group" style="color: #ef4444; margin-top: 0.2rem; flex-shrink: 0;"></i> Informal workers face health hazards with no protective equipment or safety standards.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-filter" style="color: #ef4444; margin-top: 0.2rem; flex-shrink: 0;"></i> Mixed/unsorted scrap requires costly manual separation and reduces recovery rates.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-road" style="color: #ef4444; margin-top: 0.2rem; flex-shrink: 0;"></i> Long-distance transportation for processing adds cost and carbon emissions.</li>
+                    <li style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.92rem; color: var(--text-main);"><i class="fa-solid fa-chart-line" style="color: #ef4444; margin-top: 0.2rem; flex-shrink: 0;"></i> Fluctuating scrap prices make it unreliable income for small-scale collectors.</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%); border-radius: 20px; padding: 2rem; border: 1px solid rgba(16, 185, 129, 0.15); margin-bottom: 2.5rem;">
+            <h3 style="color: var(--primary-green); margin-bottom: 0.5rem; font-size: 1.3rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Scrap-to-Product Transformation Workflow</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">See how raw scrap becomes a useful, everyday product through the recycling chain.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+                <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.15);">
+                    <div style="background: linear-gradient(90deg, #3b82f6, #6366f1); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-bottle-water" style="color: #fff; font-size: 1.4rem;"></i><span style="color: #fff; font-weight: 700;">Plastic (PET)</span></div>
+                    <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #eff6ff; color: #3b82f6; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🗑️ Collection</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">PET bottles from households</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #eff6ff; color: #3b82f6; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🔄 Shredding</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Shredded into PET flakes</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #eff6ff; color: #3b82f6; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🧵 Spinning</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Polyester fibre for textiles</span></div>
+                        <div style="background: #eff6ff; padding: 0.6rem 1rem; border-radius: 10px; margin-top: 0.4rem; font-size: 0.84rem; color: #3b82f6; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Final: T-shirts, Eco-bricks</div>
+                    </div>
+                </div>
+                <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(100,116,139,0.1); border: 1px solid rgba(100,116,139,0.15);">
+                    <div style="background: linear-gradient(90deg, #475569, #64748b); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-industry" style="color: #fff; font-size: 1.4rem;"></i><span style="color: #fff; font-weight: 700;">Metal (Steel)</span></div>
+                    <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🔩 Collection</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Old cars & appliances</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">⚡ Smelting</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Arc furnace at 1600°C</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🏗️ Casting</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Cast into ingots & rods</span></div>
+                        <div style="background: #f1f5f9; padding: 0.6rem 1rem; border-radius: 10px; margin-top: 0.4rem; font-size: 0.84rem; color: #475569; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Final: Rebar, car parts, bridges</div>
+                    </div>
+                </div>
+                <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.15);">
+                    <div style="background: linear-gradient(90deg, #7c3aed, #8b5cf6); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-microchip" style="color: #fff; font-size: 1.4rem;"></i><span style="color: #fff; font-weight: 700;">E-Waste</span></div>
+                    <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f5f3ff; color: #7c3aed; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">📱 Collection</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Old phones, TVs, PCBs</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f5f3ff; color: #7c3aed; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">🔬 Dismantling</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Robotic disassembly</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #f5f3ff; color: #7c3aed; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">⚗️ Refining</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Gold, Silver, Palladium extraction</span></div>
+                        <div style="background: #f5f3ff; padding: 0.6rem 1rem; border-radius: 10px; margin-top: 0.4rem; font-size: 0.84rem; color: #7c3aed; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Final: New PCBs, semiconductors</div>
+                    </div>
+                </div>
+                <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.15);">
+                    <div style="background: linear-gradient(90deg, #d97706, #f59e0b); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;"><i class="fa-solid fa-newspaper" style="color: #fff; font-size: 1.4rem;"></i><span style="color: #fff; font-weight: 700;">Paper & Cardboard</span></div>
+                    <div style="padding: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #fffbeb; color: #d97706; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">📦 Collection</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Newspapers & cartons</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #fffbeb; color: #d97706; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">💧 Pulping</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Paper pulp slurry</span></div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.87rem;"><span style="background: #fffbeb; color: #d97706; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 600; white-space: nowrap;">📝 Pressing</span><i class="fa-solid fa-arrow-right" style="color: #cbd5e1; flex-shrink: 0;"></i><span style="color: var(--text-muted);">Dried into new sheets</span></div>
+                        <div style="background: #fffbeb; padding: 0.6rem 1rem; border-radius: 10px; margin-top: 0.4rem; font-size: 0.84rem; color: #d97706; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Final: Notebooks, packaging</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-2" style="gap: 1.5rem; align-items: start;">
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); padding: 1.75rem; border-radius: 16px; border: 1px dashed var(--primary-green); text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1rem;">
+                <i class="fa-solid fa-chart-pie" style="font-size: 3rem; color: var(--primary-green);"></i>
+                <div>
+                    <p style="color: var(--text-main); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem;">Maharashtra: India's #1 Recycling Hub</p>
+                    <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">Processes over <strong style="color: var(--primary-green);">3.5 Million Tonnes</strong> of scrap annually. Home to clusters in Pune, Mumbai & Nagpur.</p>
+                </div>
+            </div>
+            <div style="border-radius: 16px; overflow: hidden; border: 2px solid rgba(255,255,255,0.8); height: 280px; box-shadow: var(--shadow-lg);">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820980.128711466!2d73.8118080275841!3d19.751479822452445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bce2f63f5d614e7%3A0x6b772cfffcd4e06!2sMaharashtra!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="historyModal" class="animate-in" style="display:none; flex-direction: column; margin: 2rem; scroll-margin-top: 80px;">
+        <div class="glass-panel" style="width: 100%; border: 2px solid var(--primary-green);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem;">
+                <h2 style="color: var(--primary-green); font-size: 1.8rem;"><i class="fa-solid fa-clock-rotate-left"></i> Business Orders History</h2>
+                <button onclick="document.getElementById('historyModal').style.display='none'" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Close</button>
+            </div>
+            
+            <div class="grid-2" style="margin-bottom: 1.5rem;">
+                <div class="stat-card" style="padding: 1rem;">
+                    <div class="stat-value" id="adminTotalOrders" style="font-size: 1.5rem;">0</div>
+                    <div class="stat-label">Total Orders Today</div>
+                </div>
+                <div class="stat-card" style="padding: 1rem;">
+                    <div class="stat-value" id="adminTotalSpent" style="font-size: 1.5rem;">₹0.00</div>
+                    <div class="stat-label">Total Expenditure</div>
+                </div>
+            </div>
+
+            <h3 style="color: var(--primary-green); margin-bottom: 1rem; font-size: 1.3rem;">Recent Transactions</h3>
+            <div id="historyList" class="grid-2">
+                <p style="color: var(--text-muted);">Loading history...</p>
+            </div>
+        </div>
+    </section>
+
+    </div> <!-- End main-wrapper -->
+    </div> <!-- End layout-wrapper -->
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = requireAuth('admin');
+            if (user) {
+                document.getElementById('adminGreeting').textContent = `${user.name} Business`;
+                fetchMarketplace();
+                fetchOptimizedRoutes();
+
+                // Open history if requested via URL
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('showHistory') === 'true') {
+                    showAdminHistory();
+                    setTimeout(()=>document.getElementById('historyModal').scrollIntoView({behavior:'smooth', block:'start'}), 500);
+                }
+            }
+        });
+    </script>
+
+    <footer style="background: rgba(255,255,255,0.8); padding: 3rem 1rem; margin-top: 2rem; border-top: 1px solid var(--border-glass);">
+        <div class="container grid-3" style="margin-bottom: 2rem;">
+            <div>
+                <h3 style="color: var(--primary-green); margin-bottom: 1rem;"><i class="fa-solid fa-leaf"></i> RecycleX</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Building a sustainable future, one pickup at a time. Zero minimum waste required.</p>
+            </div>
+            <div>
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Help &amp; Support</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-phone"></i> +91 7057953073</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"><i class="fa-solid fa-envelope"></i> tsanket1971@gmail.com</p>
+            </div>
+            <div>
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Legal &amp; Policies</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><a href="#" style="color: inherit; text-decoration: none;">Privacy Policy</a></p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"><a href="#" style="color: inherit; text-decoration: none;">Terms &amp; Conditions</a></p>
+            </div>
+        </div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-glass); padding-top: 1.5rem;">
+            &copy; 2026 RecycleX Platform. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

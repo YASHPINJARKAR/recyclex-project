@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | RecycleX</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #064e3b, #10b981);
+            padding: 3rem 2rem 5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            color: #10b981;
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .profile-info h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .profile-info p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        .profile-content {
+            margin-top: -1.5rem;
+            padding: 0 1rem;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .quick-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .quick-card:hover { transform: translateY(-3px); }
+
+        .donate-banner {
+            background: linear-gradient(135deg, #db2777, #f59e0b);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .donate-banner h3 { margin-bottom: 0.5rem; }
+        
+        .list-section {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .list-header {
+            padding: 1rem 1.25rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 600;
+            background: #f9fafb;
+            text-transform: uppercase;
+        }
+        .list-item {
+            padding: 1.25rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .list-item:hover { background: #f9fafb; }
+        .list-item:last-child { border-bottom: none; }
+        .list-item.text-red { color: #ef4444; }
+        .list-item-value { color: #9ca3af; font-size: 0.9rem; margin-right: 0.5rem; }
+
+        /* Updated styling for light mode */
+        body { background: var(--bg-main); }
+        .quick-card, .list-section { background: rgba(255,255,255,0.9); border: 1px solid var(--border-glass); color: var(--text-main); }
+        .list-header { background: rgba(248, 250, 252, 0.9); color: var(--text-muted); border-bottom: 1px solid var(--border-glass); }
+        .list-item { border-bottom: 1px solid var(--border-glass); color: var(--text-main); }
+        .list-item:hover { background: rgba(248, 250, 252, 1); }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        .bottom-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .bottom-nav-item.active {
+            color: var(--primary-green);
+        }
+        .bottom-nav-item:hover { color: var(--text-main); }
+        
+        /* Modal tweaks */
+        .modal-content-white {
+            background: var(--bg-main);
+            border: 1px solid var(--border-glass);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body style="padding-bottom: 80px;">
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-leaf"></i> RecycleX
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="dashboard_user.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" onclick="showUserHistory()"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+                <a href="profile.html" class="active"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="#" onclick="logout()" style="color: #ef4444; margin-top: auto;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="brand-name"><i class="fa-solid fa-leaf"></i> RecycleX</div>
+                </div>
+                <div class="user-profile">
+                    <span id="userGreeting" style="font-weight: 600; color: var(--text-main);"></span>
+                </div>
+            </header>
+
+            <div class="profile-header animate-in">
+        <div class="profile-avatar" id="profileAvatar" onclick="document.getElementById('profileImageUpload').click()" style="cursor: pointer; overflow: hidden; position: relative;" title="Upload Avatar">
+            <span id="avatarText">S</span>
+            <img id="avatarImage" style="display:none; width:100%; height:100%; object-fit:cover;" />
+            <input type="file" id="profileImageUpload" accept="image/*" style="display:none;" onchange="previewAvatar(event)" />
+        </div>
+        <div class="profile-info">
+            <h1 id="profileName">Sanket Thakare</h1>
+            <p id="profilePhone">+917057953073</p>
+        </div>
+    </div>
+
+    <div class="container profile-content">
+        <div class="quick-grid animate-in" style="animation-delay: 0.1s;">
+            <div class="quick-card" onclick="window.location.href='dashboard_user.html'"><span style="font-size: 1.2rem;">🚚</span> Pickup requests</div>
+            <div class="quick-card" onclick="shareReferral()"><span style="font-size: 1.2rem;">👥</span> Refer and earn</div>
+            <div class="quick-card" onclick="openPaymentModal()"><span style="font-size: 1.2rem;">💳</span> Payment methods</div>
+            <div class="quick-card"><span style="font-size: 1.2rem;">📍</span> Addresses</div>
+        </div>
+
+        <div class="donate-banner animate-in" style="animation-delay: 0.2s;">
+            <h3>Donate your kabad</h3>
+            <p style="font-size: 0.9rem; opacity: 0.9;">Waste pickers work tirelessly & serve our society in silence. It's time we stood by them.</p>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.3s;">
+            <div class="list-item" onclick="toggleFeedback()">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                    <span style="color: #f59e0b;">⭐</span> Your Rating & Feedback
+                </div>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Tap to open ></span>
+            </div>
+            <div id="feedbackFormBlock" style="display: none; padding: 1.5rem; border-top: 1px solid var(--border-glass);">
+                <div id="starContainer" style="display: flex; gap: 0.5rem; margin-bottom: 1rem; font-size: 1.5rem; color: #cbd5e1; cursor: pointer;">
+                    <span class="star" onclick="rateStar(1)">★</span>
+                    <span class="star" onclick="rateStar(2)">★</span>
+                    <span class="star" onclick="rateStar(3)">★</span>
+                    <span class="star" onclick="rateStar(4)">★</span>
+                    <span class="star" onclick="rateStar(5)">★</span>
+                </div>
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">How can I improve in this project?</label>
+                <textarea id="feedbackText" rows="4" placeholder="Share your detailed feedback..."></textarea>
+                <button class="btn" style="width: 100%; margin-top: 1rem;" onclick="submitFeedback()">Submit Feedback</button>
+            </div>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.35s;">
+            <div class="list-header">User Details</div>
+            <div style="padding: 1.25rem; font-size: 0.9rem; color: var(--text-main); line-height: 1.8;">
+                <p><strong>Name:</strong> <span id="detailName" style="color: var(--text-muted);"></span></p>
+                <p><strong>Email:</strong> <span id="detailEmail" style="color: var(--text-muted);"></span></p>
+                <p><strong>Phone:</strong> <span id="detailPhone" style="color: var(--text-muted);"></span></p>
+                <p><strong>Role:</strong> <span id="detailRole" style="color: var(--primary-green); text-transform: capitalize;"></span></p>
+            </div>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.4s;">
+            <div class="list-header">Account Settings</div>
+            <div class="list-item">
+                <span>👤 Profile details</span>
+                <span><span class="list-item-value" style="color: #f59e0b;">40% Completed</span> ></span>
+            </div>
+            <div class="list-item">
+                <span>🌐 Language</span>
+                <span><span class="list-item-value">English</span> ></span>
+            </div>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.5s;">
+            <div class="list-header">Other Services</div>
+            <div class="list-item">
+                <span>🚛 Bulk scrap</span>
+                <span>></span>
+            </div>
+            <div class="list-item">
+                <span>🚗 Scrap vehicle</span>
+                <span>></span>
+            </div>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.6s;">
+            <div class="list-header">Help & Support</div>
+            <div class="list-item">
+                <span>👍 Give us a feedback</span>
+                <span>></span>
+            </div>
+            <div class="list-item">
+                <span>❓ Help & support</span>
+                <span>></span>
+            </div>
+        </div>
+
+        <div class="list-section animate-in" style="animation-delay: 0.7s;">
+            <div class="list-header">More</div>
+            <div class="list-item" onclick="openPrivacyModal()">
+                <span>🛡️ Privacy policy</span>
+                <span>></span>
+            </div>
+            <div class="list-item">
+                <span>📜 Content policy</span>
+                <span>></span>
+            </div>
+            <div class="list-item">
+                <span>📄 Terms & conditions</span>
+                <span>></span>
+            </div>
+            <div class="list-item text-red" onclick="logout()">
+                <span>↪ Logout</span>
+                <span>></span>
+            </div>
+        </div>
+        
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin: 2rem 0; opacity: 0.5;">
+            App Version<br>v4.0.0 (68)
+        </div>
+    </div>
+
+    </div> <!-- End container -->
+    </div> <!-- End main-wrapper -->
+    </div> <!-- End layout-wrapper -->
+    <!-- Modals -->
+    <div id="paymentModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="modal-content-white">
+            <h2 style="color: var(--primary-green); margin-bottom: 1.5rem;">Add Bank Details</h2>
+            <form onsubmit="event.preventDefault(); saveBankDetails();">
+                <div class="form-group">
+                    <label>Account Holder Name</label>
+                    <input type="text" id="accName" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="accNo" placeholder="XXXXXXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="ifscCode" placeholder="BANK0001234" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Save Payment Method</button>
+            </form>
+            <button onclick="document.getElementById('paymentModal').style.display='none'" class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <div id="privacyModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+        <div class="modal-content-white" style="max-height: 80vh; overflow-y: auto;">
+            <h2 style="color: var(--primary-green); margin-bottom: 1.5rem;">Privacy Policy & Terms</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                <strong>1. Data Collection:</strong> We collect your name, phone number, and address strictly for the purpose of facilitating scrap pickup services.<br><br>
+                <strong>2. Media:</strong> Uploaded images are analyzed using our AI model. We do not share your images with third-party advertisers.<br><br>
+                <strong>3. Location:</strong> Your address coordinates are safely passed to our Smart Route Optimizer backend to enable collectors to reach you efficiently.<br><br>
+                <strong>4. Account Security:</strong> You are responsible for keeping your credentials confidential. Passwords are encrypted on our servers.<br><br>
+                <strong>5. Payments:</strong> Collected Bank Information is encrypted and used solely for issuing payouts upon completely successful pickups.
+            </p>
+            <button onclick="document.getElementById('privacyModal').style.display='none'" class="btn" style="width: 100%;">I Understand</button>
+        </div>
+    </div>
+
+    <!-- Need minimal script for rendering profile and alerts -->
+    <div id="alertBox" class="alert" style="position: fixed; top: 1rem; right: 1rem; width: 300px; z-index: 2000;"></div>
+    
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = requireAuth();
+            if (user) {
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profilePhone').textContent = user.phone;
+                document.getElementById('avatarText').textContent = user.name.charAt(0).toUpperCase();
+                
+                // Populate details block
+                document.getElementById('detailName').textContent = user.name;
+                document.getElementById('detailEmail').textContent = user.email;
+                document.getElementById('detailPhone').textContent = user.phone;
+                document.getElementById('detailRole').textContent = user.role;
+                
+                // Check if avatar was saved locally for demo
+                const savedAvatar = localStorage.getItem(`avatar_${user.id}`);
+                if (savedAvatar) {
+                    document.getElementById('avatarImage').src = savedAvatar;
+                    document.getElementById('avatarImage').style.display = 'block';
+                    document.getElementById('avatarText').style.display = 'none';
+                }
+            }
+        });
+
+        function previewAvatar(event) {
+            const user = requireAuth('user');
+            const file = event.target.files[0];
+            if (file && user) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const result = e.target.result;
+                    document.getElementById('avatarImage').src = result;
+                    document.getElementById('avatarImage').style.display = 'block';
+                    document.getElementById('avatarText').style.display = 'none';
+                    // Store locally for demo purposes
+                    localStorage.setItem(`avatar_${user.id}`, result);
+                    showAlert('Profile image uploaded successfully', 'success');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        let currentRating = 0;
+        function toggleFeedback() {
+            const block = document.getElementById('feedbackFormBlock');
+            block.style.display = block.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function rateStar(stars) {
+            currentRating = stars;
+            const starElements = document.querySelectorAll('.star');
+            starElements.forEach((el, index) => {
+                if (index < stars) {
+                    el.style.color = '#f59e0b';
+                } else {
+                    el.style.color = '#cbd5e1';
+                }
+            });
+        }
+
+        function submitFeedback() {
+            const text = document.getElementById('feedbackText').value;
+            if (currentRating === 0) {
+                showAlert('Please select a star rating.', 'error');
+                return;
+            }
+            if (!text.trim()) {
+                showAlert('Please let us know how we can improve.', 'error');
+                return;
+            }
+            showAlert(`Thank you for your ${currentRating}-star feedback!`, 'success');
+            document.getElementById('feedbackText').value = '';
+            toggleFeedback();
+        }
+
+        function openPaymentModal() {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function shareReferral() {
+            const user = requireAuth('user') || { id: 'guest' };
+            const referLink = window.location.origin + "/frontend/register.html?ref=" + user.id;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join RecycleX',
+                    text: 'Turn waste into wealth with RecycleX! Join me and earn rewards toward a greener planet.',
+                    url: referLink
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(referLink).then(() => {
+                    showAlert('Referral link copied to clipboard!', 'success');
+                });
+            }
+        }
+
+        function openPrivacyModal() {
+            document.getElementById('privacyModal').style.display = 'flex';
+        }
+
+        function saveBankDetails() {
+            showAlert('Bank details securely saved!', 'success');
+            setTimeout(() => {
+                document.getElementById('paymentModal').style.display = 'none';
+            }, 1500);
+        }
+    </script>
+
+    <footer style="background: rgba(255,255,255,0.8); padding: 3rem 1rem; margin-top: 2rem; margin-bottom: 5rem; border-top: 1px solid var(--border-glass);">
+        <div class="container grid-3" style="margin-bottom: 2rem;">
+            <div>
+                <h3 style="color: var(--primary-green); margin-bottom: 1rem;"><i class="fa-solid fa-leaf"></i> RecycleX</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Building a sustainable future, one pickup at a time. Zero minimum waste required.</p>
+            </div>
+            <div>
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Help &amp; Support</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-phone"></i> +91 7057953073</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"><i class="fa-solid fa-envelope"></i> tsanket1971@gmail.com</p>
+            </div>
+            <div>
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Legal &amp; Policies</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><a href="#" style="color: inherit; text-decoration: none;">Privacy Policy</a></p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;"><a href="#" style="color: inherit; text-decoration: none;">Terms &amp; Conditions</a></p>
+            </div>
+        </div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-glass); padding-top: 1.5rem;">
+            &copy; 2026 RecycleX Platform. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ecommerce Marketplace | RecycleX</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .product-card {
+            background: var(--surface-solid);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border-light);
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary-green);
+            color: #fff;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .product-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .product-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            margin-top: 0.85rem;
+            font-size: 0.85rem;
+            color: #f59e0b;
+        }
+        .product-rating-text {
+            color: #3b82f6;
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] .product-price-row {
+            border-top: 1px dashed rgba(255,255,255,0.1);
+        }
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+        .btn-cart {
+            background: #f59e0b;
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-cart:hover {
+            background: #d97706;
+            transform: scale(1.05);
+        }
+        .ecommerce-header {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .ecommerce-banner-text h2 {
+            font-size: 2.2rem;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+        .ecommerce-banner-text p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        .cart-summary {
+            background: var(--surface-solid);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-leaf"></i> RecycleX
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" onclick="toggleSidebar()"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="dashboard_user.html" onclick="toggleSidebar()"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="dashboard_user.html#services" onclick="toggleSidebar()"><i class="fa-solid fa-layer-group"></i> Our Services</a>
+                <a href="dashboard_user.html#scrap-insights" onclick="toggleSidebar()"><i class="fa-solid fa-map-location-dot"></i> Scrap Insights</a>
+                <a href="javascript:void(0)" onclick="window.location.href='dashboard_user.html?showHistory=true'"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+                <a href="profile.html" onclick="toggleSidebar()"><i class="fa-solid fa-user"></i> Profile</a>
+                <a href="ecommerce.html" class="active" onclick="toggleSidebar()"><i class="fa-solid fa-cart-shopping"></i> Ecommerce</a>
+                <a href="#" onclick="logout()" style="color: #ef4444; margin-top: auto;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="brand-name"><i class="fa-solid fa-leaf"></i> RecycleX</div>
+                </div>
+                <div class="user-profile" style="display: flex; align-items: center; gap: 1rem;">
+                    
+                    <div class="dropdown" style="position: relative;">
+                        <button onclick="toggleCreditDropdown()" style="background: transparent; border: none; cursor: pointer; color: #f59e0b; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(245, 158, 11, 0.1); padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 700;">
+                            <i class="fa-solid fa-coins"></i> <span id="userCredits">₹0.00</span>
+                        </button>
+                        <div id="creditDropdown" class="glass-panel animate-in" style="display: none; position: absolute; right: 0; top: 110%; width: 15rem; z-index: 1000; padding: 0.5rem; flex-direction: column; gap: 0.25rem; box-shadow: var(--shadow-lg);">
+                            <a href="#" style="color: var(--text-main); text-decoration: none; padding: 0.6rem 0.75rem; border-radius: 6px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; font-weight: 500;" onmouseover="this.style.background='rgba(16, 185, 129, 0.1)'" onmouseout="this.style.background='transparent'"><i class="fa-solid fa-money-bill-wave" style="color: var(--primary-green); width: 1.2rem; text-align: center;"></i> Withdraw money</a>
+                            <a href="ecommerce.html" style="color: var(--text-main); text-decoration: none; padding: 0.6rem 0.75rem; border-radius: 6px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; font-weight: 500;" onmouseover="this.style.background='rgba(16, 185, 129, 0.1)'" onmouseout="this.style.background='transparent'"><i class="fa-solid fa-cart-shopping" style="color: var(--primary-green); width: 1.2rem; text-align: center;"></i> Ecommerce Point</a>
+                            <a href="#" style="color: var(--text-main); text-decoration: none; padding: 0.6rem 0.75rem; border-radius: 6px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; font-weight: 500;" onmouseover="this.style.background='rgba(16, 185, 129, 0.1)'" onmouseout="this.style.background='transparent'"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary-green); width: 1.2rem; text-align: center;"></i> Tax Concession</a>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleTheme()" style="background: transparent; border: none; cursor: pointer; color: var(--primary-green); font-size: 1.25rem; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-moon theme-icon"></i></button>
+                    <select id="languageSwitcher" onchange="changeLanguage(this.value)" style="padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-light); font-size: 0.85rem; width: auto; background: var(--surface-solid); color: var(--text-main); cursor: pointer;">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                    <span id="userGreeting" style="font-weight: 600; color: var(--text-main);"></span>
+                </div>
+            </header>
+
+            <div class="container" style="margin-top: 2rem;">
+                <div id="alertBox" class="alert"></div>
+
+                <div class="ecommerce-header animate-in">
+                    <div class="ecommerce-banner-text">
+                        <h2><i class="fa-solid fa-leaf"></i> Eco-Store Marketplace</h2>
+                        <p>Buy premium products completely made from recycled scrap materials.</p>
+                    </div>
+                    <div class="cart-summary">
+                        <i class="fa-solid fa-cart-shopping" style="font-size: 1.5rem; color: var(--primary-green);"></i>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Items in Cart</div>
+                            <div style="font-weight: 800; color: var(--text-main); font-size: 1.1rem;">0 Items</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="productsContainer" class="product-grid">
+                    <!-- Products will be injected here via JavaScript -->
+                    <p style="color: var(--text-muted);">Loading premium recycled products...</p>
+                </div>
+            </div>
+        </div>
+
+        <footer style="background: rgba(255,255,255,0.8); padding: 3rem 1rem; margin-top: 4rem; border-top: 1px solid var(--border-glass);">
+            <div class="container grid-3" style="margin-bottom: 2rem;">
+                <div>
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;"><i class="fa-solid fa-leaf"></i> RecycleX</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Building a sustainable future, one pickup at a time. Zero minimum waste required.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); margin-bottom: 1rem;">Help &amp; Support</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-phone"></i> +91 7057953073</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;"><i class="fa-solid fa-envelope"></i> tsanket1971@gmail.com</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--text-main); margin-bottom: 1rem;">Legal &amp; Policies</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;"><a href="#" style="color: inherit; text-decoration: none;">Privacy Policy</a></p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;"><a href="#" style="color: inherit; text-decoration: none;">Terms &amp; Conditions</a></p>
+                </div>
+            </div>
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-glass); padding-top: 1.5rem;">
+                &copy; 2026 RecycleX Platform. All Rights Reserved.
+            </div>
+        </footer>
+    </div>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = requireAuth('user');
+            if (user) {
+                document.getElementById('userGreeting').textContent = `Hello, ${user.name}`;
+                refreshStats();
+                fetchEcommerceProducts();
+            }
+        });
+
+        async function fetchEcommerceProducts() {
+            try {
+                const res = await fetch(`${API_URL}/ecommerce/products`);
+                const products = await res.json();
+                
+                const container = document.getElementById("productsContainer");
+                container.innerHTML = "";
+                
+                if (products.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-muted);">No products available right now.</p>';
+                    return;
+                }
+                
+                products.forEach((product, i) => {
+                    const stars = Math.round(product.rating);
+                    let starsHtml = '';
+                    for(let j=0; j<5; j++) {
+                        starsHtml += `<i class="fa-solid fa-star" style="color: ${j < stars ? '#f59e0b' : '#e2e8f0'}"></i>`;
+                    }
+
+                    const card = document.createElement("div");
+                    card.className = "product-card animate-in";
+                    card.style.animationDelay = `${i * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="product-image-container">
+                            <div class="badge">100% Recycled</div>
+                            <img src="${product.image}" loading="lazy" class="product-image" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${product.name}</div>
+                            <div class="product-rating">
+                                ${starsHtml}
+                                <span class="product-rating-text">${product.reviews} reviews</span>
+                            </div>
+                            <div class="product-desc" style="margin-top: 0.5rem;">${product.description}</div>
+                            
+                            <div class="product-price-row">
+                                <div class="product-price">₹${product.price.toFixed(2)}</div>
+                                <button class="btn-cart" onclick="addToCart(event, ${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price})">
+                                    <i class="fa-solid fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Failed to fetch products:", e);
+                document.getElementById("productsContainer").innerHTML = '<p style="color: #ef4444;">Could not load products. Server might be offline.</p>';
+            }
+        }
+
+        let cartCount = 0;
+        function addToCart(event, id, name, price) {
+            event.stopPropagation(); // prevent clicking the card
+            cartCount++;
+            document.querySelector('.cart-summary div:nth-child(2) div:nth-child(2)').textContent = `${cartCount} Item${cartCount === 1 ? '' : 's'}`;
+            showAlert(`${name} added to your cart!`, "success");
+        }
+    </script>
+</body>
+
+</html>
