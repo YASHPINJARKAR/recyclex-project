@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8001";
+const API_URL = "https://recyclex-backend.onrender.com";
 
 function showAlert(message, type="success") {
     const box = document.getElementById("alertBox");
